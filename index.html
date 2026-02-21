@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DRN.TODAY — Somnath Kurmi · AI Systems Architect</title>
 <meta name="description" content="DRN.TODAY — Somnath Kurmi, AI Systems Architect & Full-Stack Innovator.">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -16,9 +16,10 @@
   --dark:#030614;--dark2:#060b20;--glass:rgba(6,11,32,.88);
   --FH:'Orbitron',sans-serif;--FB:'Rajdhani',sans-serif;--FM:'Share Tech Mono',monospace;
   --ez:cubic-bezier(.16,1,.3,1);--snap-dur:900ms;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--vh:1vh;
 }
 html,body{
-  overflow:hidden;width:100vw;height:100vh;
+  overflow:hidden;width:100vw;min-height:100vh;min-height:100dvh;min-height:calc(var(--vh,1vh) * 100);
   background:var(--dark);color:#fff;font-family:var(--FB);
   touch-action:none;
 }
@@ -39,7 +40,7 @@ a{color:inherit;text-decoration:none}
 #scanlines.on{opacity:1}
 #bloom{position:fixed;inset:0;z-index:430;pointer-events:none;opacity:0;mix-blend-mode:screen}
 #transition-label{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;transform:translateX(-50%);
   font-family:var(--FM);font-size:.5rem;letter-spacing:4px;color:rgba(0,229,255,.3);
   z-index:400;pointer-events:none;transition:opacity .5s;opacity:0;
   text-transform:uppercase;
@@ -49,7 +50,7 @@ a{color:inherit;text-decoration:none}
 /* ═══════════════════════════════════════════════
    HUD
 ═══════════════════════════════════════════════ */
-#hud{position:fixed;left:24px;top:24px;z-index:200;font-family:var(--FM);pointer-events:none}
+#hud{position:fixed;left:24px;top:calc(24px + var(--safe-top));z-index:200;font-family:var(--FM);pointer-events:none}
 #hud-index{font-size:3rem;font-weight:900;font-family:var(--FH);line-height:1;color:var(--c1);opacity:.9;transition:color .6s,transform .4s}
 #hud-section{font-size:.55rem;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;transition:color .6s}
 #hud-bar{width:1px;height:48px;background:var(--c1);margin-top:10px;transform-origin:top;transform:scaleY(0);transition:transform .8s var(--ez),background .6s}
@@ -61,7 +62,7 @@ a{color:inherit;text-decoration:none}
 
 /* Transition mode indicator pill */
 #mode-pill{
-  position:fixed;top:24px;right:60px;z-index:200;
+  position:fixed;top:calc(24px + var(--safe-top));right:60px;z-index:200;
   font-family:var(--FM);font-size:.52rem;letter-spacing:3px;
   background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);
   color:rgba(0,229,255,.6);padding:5px 12px;border-radius:2px;
@@ -105,7 +106,7 @@ a{color:inherit;text-decoration:none}
 /* The 3D world that moves */
 #stage{
   position:absolute;
-  width:100vw;height:100vh;
+  width:100vw;height:100vh;height:100dvh;height:calc(var(--vh,1vh) * 100);
   transform-style:preserve-3d;
   /* JS controls transform */
 }
@@ -113,7 +114,7 @@ a{color:inherit;text-decoration:none}
 /* Each section is a panel in 3D space */
 .sec-panel{
   position:absolute;
-  width:100vw;height:100vh;
+  width:100vw;height:100vh;height:100dvh;height:calc(var(--vh,1vh) * 100);
   display:flex;align-items:center;justify-content:center;
   padding:clamp(12px,3vw,60px) clamp(12px,3vw,20px);
   overflow:hidden;
@@ -401,7 +402,7 @@ a{color:inherit;text-decoration:none}
    RESPONSIVE SCROLL HINT ARROWS (mobile)
 ═══════════════════════════════════════════════ */
 #mobile-arrows{
-  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:calc(16px + var(--safe-bottom));left:50%;transform:translateX(-50%);
   display:none;gap:12px;z-index:200;
 }
 @media(max-width:600px){#mobile-arrows{display:flex}}
@@ -413,6 +414,26 @@ a{color:inherit;text-decoration:none}
   touch-action:manipulation;
 }
 .marrow:active{background:rgba(0,229,255,.25);transform:scale(.9)}
+
+@media (max-width:600px){
+  .sec-panel{padding:20px 12px calc(84px + var(--safe-bottom));}
+  .sec-inner{width:100%;max-width:100%;}
+  .cube-grid,.pkg-grid,.contact-cards,.stats{grid-template-columns:1fr;}
+  .cube-card,.pkg,.ccard,.stat-box{padding:clamp(18px,4.4vw,26px);}
+  .sec-desc,.cc-desc,.pkg-list li,.faq-a,.ccard-val{font-size:clamp(14px,3.6vw,16px);line-height:1.58;color:rgba(216,230,248,.86);}
+  .faq-q{font-size:clamp(.72rem,3.4vw,.9rem);}
+  .pkg-btn,.li-btn{min-height:44px;padding:10px 18px;display:inline-flex;align-items:center;justify-content:center;}
+  .marrow{width:40px;height:40px;font-size:.9rem;}
+}
+
+@media (max-width:480px){
+  .hero-inner{width:100%;padding-inline:16px;}
+  .hero-tagline{line-height:1.5;margin-bottom:22px;}
+  .hero-btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;width:100%;padding-inline:16px;}
+  .hbtn{min-width:0;min-height:44px;padding:10px 12px;white-space:normal;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
+  .scroll-hint{bottom:calc(84px + var(--safe-bottom));}
+}
+
 </style>
 </head>
 <body>
@@ -838,6 +859,18 @@ const SEC_COLORS = {
 const TRANS_TYPES = ['VERTICAL','HORIZONTAL','INCLINED'];
 const TRANS_ICONS = ['▼','◀','◢'];
 const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
+const mobileQuery = window.matchMedia('(max-width: 600px)');
+const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isMobile = () => mobileQuery.matches;
+const prefersReducedMotion = () => reducedMotionQuery.matches;
+
+function setViewportHeightVar(){
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+}
+setViewportHeightVar();
+window.addEventListener('resize', setViewportHeightVar);
+window.addEventListener('orientationchange', setViewportHeightVar);
+
 
 /* ════════════════════════════════════════════════════
    3D SCROLL ENGINE
@@ -1079,13 +1112,26 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
 
   /* ── Wheel ── */
   let wheelLock = false;
+  let wheelDelta = 0;
+  let wheelRaf = null;
+  function processWheel(){
+    wheelRaf = null;
+    if(wheelLock) return;
+    if(wheelDelta > 15){
+      wheelLock = true;
+      navigateTo(curIdx + 1);
+      setTimeout(() => wheelLock = false, ANIM_DUR + 100);
+    }else if(wheelDelta < -15){
+      wheelLock = true;
+      navigateTo(curIdx - 1);
+      setTimeout(() => wheelLock = false, ANIM_DUR + 100);
+    }
+    wheelDelta = 0;
+  }
   window.addEventListener('wheel', e => {
     e.preventDefault();
-    if(wheelLock) return;
-    wheelLock = true;
-    if(e.deltaY > 15) navigateTo(curIdx + 1);
-    else if(e.deltaY < -15) navigateTo(curIdx - 1);
-    setTimeout(() => wheelLock = false, ANIM_DUR + 100);
+    wheelDelta += e.deltaY;
+    if(!wheelRaf) wheelRaf = requestAnimationFrame(processWheel);
   }, {passive:false});
 
   /* ── Keys ── */
@@ -1151,7 +1197,8 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
   let curColor={r:0,g:.898,b:1}, tColor={r:0,g:.898,b:1};
   let mX=0,mY=0,tmX=0,tmY=0;
   let tIdx=0;
-  const mob = innerWidth < 768;
+  let mob = isMobile();
+  const motionScale = prefersReducedMotion() ? 0.45 : 1;
 
   function lerp(a,b,t){ return a+(b-a)*t; }
   function hex2col(h){
@@ -1172,7 +1219,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
 
     renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
     renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mob ? 1.5 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
 
@@ -1182,7 +1229,8 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
 
     /* Holographic cubes */
     const cc = [0x00e5ff,0xb400ff,0xff2d9b,0x00ff9d,0x4f46ff,0xff7b00];
-    const cn = mob?12:22;
+    const density = mob ? 0.5 : 1;
+    const cn = Math.max(8, Math.round((mob ? 12 : 22) * density));
     for(let i=0;i<cn;i++){
       const sz=2.5+Math.random()*4.5;
       const geo=new THREE.BoxGeometry(sz,sz,sz);
@@ -1195,13 +1243,13 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
       const rad=35+Math.random()*60;
       g.position.set(Math.cos(ang)*rad,(Math.random()-.5)*80,Math.sin(ang)*rad*.6-20);
       g.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);
-      g.userData={rx:(Math.random()-.5)*.015,ry:(Math.random()-.5)*.018,rz:(Math.random()-.5)*.01,baseY:g.position.y,fSpd:.2+Math.random()*.4,fOff:Math.random()*Math.PI*2,edgeMat,faceMat};
+      g.userData={rx:((Math.random()-.5)*.015)*motionScale,ry:((Math.random()-.5)*.018)*motionScale,rz:((Math.random()-.5)*.01)*motionScale,baseY:g.position.y,fSpd:(.2+Math.random()*.4)*motionScale,fOff:Math.random()*Math.PI*2,edgeMat,faceMat};
       scene.add(g);cubes.push(g);
     }
 
     /* Neural nodes */
     const nGeo=new THREE.SphereGeometry(.7,8,8);
-    const nc=mob?18:36;
+    const nc=Math.max(10, Math.round((mob ? 18 : 36) * density));
     for(let i=0;i<nc;i++){
       const mat=new THREE.MeshPhongMaterial({color:0x00e5ff,emissive:0x00e5ff,emissiveIntensity:.5,transparent:true,opacity:.7});
       const mesh=new THREE.Mesh(nGeo,mat);
@@ -1209,13 +1257,13 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
       const phi=Math.acos(2*Math.random()-1);
       const theta=Math.random()*Math.PI*2;
       mesh.position.set(r*Math.sin(phi)*Math.cos(theta),r*Math.sin(phi)*Math.sin(theta)*.5,r*Math.cos(phi)-20);
-      mesh.userData={fOff:Math.random()*Math.PI*2,fSpd:.3+Math.random()*.5,mat,basePos:mesh.position.clone()};
+      mesh.userData={fOff:Math.random()*Math.PI*2,fSpd:(.3+Math.random()*.5)*motionScale,mat,basePos:mesh.position.clone()};
       scene.add(mesh);nodes.push(mesh);
     }
 
     /* Connections */
     const lineMat=new THREE.LineBasicMaterial({color:0x00e5ff,transparent:true,opacity:.07});
-    const maxCon=mob?25:70;
+    const maxCon=Math.max(16, Math.round((mob ? 25 : 70) * density));
     for(let i=0;i<nodes.length;i++){
       for(let j=i+1;j<nodes.length;j++){
         if(connections.length>=maxCon) break;
@@ -1225,7 +1273,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
     }
 
     /* Particle field */
-    const pc=mob?3000:8000;
+    const pc=Math.max(1400, Math.round((mob ? 3000 : 8000) * density));
     const pPos=new Float32Array(pc*3);
     for(let i=0;i<pc;i++){pPos[i*3]=(Math.random()-.5)*300;pPos[i*3+1]=(Math.random()-.5)*200;pPos[i*3+2]=(Math.random()-.5)*300;}
     const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
@@ -1233,7 +1281,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
     scene.add(particles);
 
     document.addEventListener('mousemove',e=>{tmX=(e.clientX/innerWidth-.5)*2;tmY=(e.clientY/innerHeight-.5)*2;});
-    window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+    window.addEventListener('resize',()=>{mob = isMobile();camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mob ? 1.5 : 2));});
 
     animate();
   };
@@ -1241,7 +1289,8 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
   function animate(){
     requestAnimationFrame(animate);
     const el=clock.getElapsedTime();
-    mX=lerp(mX,tmX,.05);mY=lerp(mY,tmY,.05);
+    const driftEase = prefersReducedMotion() ? .025 : .05;
+    mX=lerp(mX,tmX,driftEase);mY=lerp(mY,tmY,driftEase);
 
     // Lerp section color
     const panels=document.querySelectorAll('.sec-panel.vis');
@@ -1256,9 +1305,10 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
     const c=curColor;
 
     // Camera gentle drift
-    camera.position.x=lerp(camera.position.x,mX*5,.04);
-    camera.position.y=lerp(camera.position.y,-mY*4,.04);
-    camera.fov=lerp(camera.fov,70+Math.sin(el*.3)*2,.03);
+    const driftAmount = prefersReducedMotion() ? 2 : 5;
+    camera.position.x=lerp(camera.position.x,mX*driftAmount,.04);
+    camera.position.y=lerp(camera.position.y,-mY*(driftAmount*.8),.04);
+    camera.fov=lerp(camera.fov,70+Math.sin(el*.3)*(prefersReducedMotion() ? .7 : 2),.03);
     camera.lookAt(0,0,0);camera.updateProjectionMatrix();
 
     // Tint lights
@@ -1326,7 +1376,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
 
       if(type===0){
         /* ── VERTICAL FX: Horizontal bars sweep down ── */
-        const barCount=12;
+        const barCount=isMobile()?8:12;
         const barH=innerHeight/barCount;
         for(let i=0;i<barCount;i++){
           const delay=i/(barCount-1);
@@ -1353,7 +1403,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
       }
       else if(type===1){
         /* ── HORIZONTAL FX: Vertical bars sweep right ── */
-        const barCount=10;
+        const barCount=isMobile()?7:10;
         const barW=innerWidth/barCount;
         for(let i=0;i<barCount;i++){
           const delay=i/(barCount-1);
@@ -1386,7 +1436,7 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
         ctx.rotate(Math.PI/4); // 45 degrees
 
         // Diagonal bands sweeping along rotated axis
-        const bands=8;
+        const bands=isMobile()?5:8;
         for(let i=0;i<bands;i++){
           const delay=i/(bands-1);
           const prog=Math.max(0,Math.min(1,(p*2.2-delay)));
