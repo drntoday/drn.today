@@ -18,7 +18,7 @@
   --ez:cubic-bezier(.16,1,.3,1);--snap-dur:900ms;
 }
 html,body{
-  overflow:hidden;width:100vw;height:100vh;
+  overflow:hidden;width:100vw;height:calc(var(--vh, 1vh) * 100);
   background:var(--dark);color:#fff;font-family:var(--FB);
   touch-action:none;
 }
@@ -113,7 +113,7 @@ a{color:inherit;text-decoration:none}
 /* Each section is a panel in 3D space */
 .sec-panel{
   position:absolute;
-  width:100vw;height:100vh;
+  width:100vw;height:calc(var(--vh, 1vh) * 100);
   display:flex;align-items:center;justify-content:center;
   padding:clamp(12px,3vw,60px) clamp(12px,3vw,20px);
   overflow:hidden;
@@ -401,7 +401,7 @@ a{color:inherit;text-decoration:none}
    RESPONSIVE SCROLL HINT ARROWS (mobile)
 ═══════════════════════════════════════════════ */
 #mobile-arrows{
-  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);
   display:none;gap:12px;z-index:200;
 }
 @media(max-width:600px){#mobile-arrows{display:flex}}
@@ -413,6 +413,43 @@ a{color:inherit;text-decoration:none}
   touch-action:manipulation;
 }
 .marrow:active{background:rgba(0,229,255,.25);transform:scale(.9)}
+
+/* ===============================
+   MOBILE CONTENT SCROLL FIX
+================================ */
+@media (max-width: 600px){
+
+  .sec-panel{
+    padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .glass{
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(var(--vh, 1vh) * 100 - 150px);
+    padding-bottom: 24px;
+  }
+
+}
+
+/* ===============================
+   MOBILE GRID FIX
+================================ */
+@media (max-width: 600px){
+
+  .cube-grid,
+  .pkg-grid,
+  .contact-cards{
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+  .stats{
+    grid-template-columns: 1fr !important;
+  }
+
+}
+
 </style>
 </head>
 <body>
@@ -839,6 +876,14 @@ const TRANS_TYPES = ['VERTICAL','HORIZONTAL','INCLINED'];
 const TRANS_ICONS = ['▼','◀','◢'];
 const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
 
+// --- Mobile viewport height fix ---
+function setVH(){
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
 /* ════════════════════════════════════════════════════
    3D SCROLL ENGINE
 ════════════════════════════════════════════════════ */
@@ -1122,6 +1167,48 @@ const TRANS_LABELS = ['▼ VERTICAL','◀ HORIZONTAL','◢ INCLINED'];
   /* ── Mobile arrow buttons ── */
   document.getElementById('ma-up')?.addEventListener('click', () => navigateTo(curIdx-1));
   document.getElementById('ma-dn')?.addEventListener('click', () => navigateTo(curIdx+1));
+
+  // ===============================
+  // Mobile swipe navigation
+  // ===============================
+  (function enableSwipeNav(){
+    const el = document.getElementById('stage-clip') || document.body;
+
+    let startY = 0;
+    let startX = 0;
+    let active = false;
+
+    const THRESH = 40;
+    const DIAG = 90;
+
+    el.addEventListener('touchstart', (e) => {
+      if (!e.touches || e.touches.length !== 1) return;
+      active = true;
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', (e) => {
+      if (!active) return;
+      e.preventDefault();
+    }, { passive: false });
+
+    el.addEventListener('touchend', (e) => {
+      if (!active) return;
+      active = false;
+
+      const t = e.changedTouches && e.changedTouches[0];
+      if (!t) return;
+
+      const dy = t.clientY - startY;
+      const dx = t.clientX - startX;
+
+      if (Math.abs(dx) > DIAG) return;
+
+      if (dy <= -THRESH) navigateTo(curIdx + 1);
+      if (dy >= THRESH) navigateTo(curIdx - 1);
+    }, { passive: true });
+  })();
 
   /* ── FAQ ── */
   document.querySelectorAll('.faq-item').forEach(item => {
