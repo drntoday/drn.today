@@ -12,11 +12,14 @@
 ═══════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
+  /* CSS TOKENS */
   --c1:#00e5ff;--c2:#b400ff;--c3:#ff2d9b;--c4:#00ff9d;--c5:#ff7b00;--c6:#4f46ff;
   --dark:#030614;--dark2:#060b20;--glass:rgba(6,11,32,.88);
   --FH:'Orbitron',sans-serif;--FB:'Rajdhani',sans-serif;--FM:'Share Tech Mono',monospace;
   --ez:cubic-bezier(.16,1,.3,1);--snap-dur:900ms;
+  --room-tint:#00e5ff;--room-rgb:0,229,255;--depth-z:0;
 }
+/* META/SEO: semantic text remains in DOM for readability + indexing */
 html,body{
   overflow:hidden;width:100vw;height:100vh;
   background:var(--dark);color:#fff;font-family:var(--FB);
@@ -1036,9 +1039,76 @@ a{color:inherit;text-decoration:none}
 .sec-desc    { transform: translateZ(8px);  }
 .corner      { transform: translateZ(40px); }
 
+
+
+/* CSS FX */
+#facility-overlay{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,rgba(0,18,34,.45),rgba(2,5,14,.95));transition:opacity .6s var(--ez),visibility .6s;}
+#facility-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.facility-shell{width:min(560px,92vw);border:1px solid rgba(var(--room-rgb),.3);background:rgba(3,9,26,.82);padding:20px;border-radius:8px;backdrop-filter:blur(16px)}
+.facility-log{font-family:var(--FM);font-size:.62rem;letter-spacing:1.2px;color:rgba(185,220,240,.68);line-height:1.8;min-height:92px}
+.facility-log strong{color:var(--c1)}
+#facility-enter{margin-top:10px;padding:10px 18px;font-family:var(--FH);letter-spacing:2px;background:rgba(0,229,255,.1);color:var(--c1);border:1px solid rgba(0,229,255,.4);border-radius:4px;cursor:pointer}
+#facility-enter[disabled]{opacity:.45;cursor:not-allowed}
+body.state-calibrating #nav,body.state-calibrating #idx-btn{pointer-events:none;opacity:.3}
+
+#room-fx{position:fixed;inset:0;z-index:35;pointer-events:none;mix-blend-mode:screen}
+#room-fx::before,#room-fx::after{content:'';position:absolute;inset:0;opacity:.45;transition:opacity .5s,transform .8s;background:radial-gradient(circle at 50% 50%,rgba(var(--room-rgb),.18),transparent 68%)}
+body.motif-blueprint #room-fx::after{background-image:linear-gradient(rgba(var(--room-rgb),.08) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--room-rgb),.08) 1px,transparent 1px);background-size:42px 42px;animation:gridDrift 12s linear infinite}
+body.motif-prism #room-fx::after{background:conic-gradient(from 140deg,transparent 0 25%,rgba(var(--room-rgb),.18) 35%,transparent 50% 75%,rgba(var(--room-rgb),.14) 84%,transparent)}
+body.motif-orbital #room-fx::after{background:radial-gradient(circle,transparent 28%,rgba(var(--room-rgb),.16) 30% 31%,transparent 33% 45%,rgba(var(--room-rgb),.12) 46% 47%,transparent 49%)}
+body.motif-scan #room-fx::after{background:linear-gradient(180deg,transparent 5%,rgba(var(--room-rgb),.17) 50%,transparent 95%);animation:roomScan 3.2s ease-in-out infinite}
+@keyframes roomScan{0%,100%{transform:translateY(-14%)}50%{transform:translateY(14%)}}
+
+#travel-gate{position:fixed;left:50%;top:50%;width:min(52vw,420px);height:min(62vh,520px);transform:translate(-50%,-50%) scale(.76);border:2px solid rgba(var(--room-rgb),.55);z-index:560;opacity:0;pointer-events:none;box-shadow:0 0 40px rgba(var(--room-rgb),.32),inset 0 0 22px rgba(var(--room-rgb),.24);mix-blend-mode:screen}
+#travel-gate.on{animation:gatePass .72s var(--ez)}
+@keyframes gatePass{0%{opacity:0;transform:translate(-50%,-50%) scale(.72)}22%{opacity:.95}100%{opacity:0;transform:translate(-50%,-50%) scale(1.28)}}
+body.state-entering #travel-gate{opacity:1;animation:gatePass .85s var(--ez)}
+
+.home-hub{position:relative;margin-top:22px;height:220px;border:1px solid rgba(0,229,255,.2);border-radius:8px;background:radial-gradient(circle at 50% 50%,rgba(0,229,255,.1),rgba(5,12,30,.6) 60%)}
+.hub-core{position:absolute;left:50%;top:50%;width:90px;height:90px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(0,229,255,.55);display:grid;place-items:center;font-family:var(--FH);font-size:.52rem;letter-spacing:1.5px;box-shadow:0 0 24px rgba(0,229,255,.35);animation:coreBreath 2.8s ease-in-out infinite}
+@keyframes coreBreath{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+.hub-node{position:absolute;min-width:82px;padding:8px 10px;border:1px solid rgba(255,255,255,.24);background:rgba(3,10,28,.76);font-family:var(--FM);font-size:.5rem;letter-spacing:1px;text-transform:uppercase;border-radius:999px;color:#d7f5ff;cursor:pointer;transform:translate(-50%,-50%);transition:transform .3s,border-color .3s,box-shadow .3s}
+.hub-node:hover,.hub-node:focus-visible{transform:translate(-50%,-50%) scale(1.07);border-color:var(--room-tint);box-shadow:0 0 18px rgba(var(--room-rgb),.35)}
+.hub-node[data-shape="diamond"]{border-radius:2px}
+.hub-node[data-shape="hex"]{clip-path:polygon(18% 0,82% 0,100% 50%,82% 100%,18% 100%,0 50%)}
+
+.glass{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset -1px -1px 0 rgba(0,0,0,.35),0 22px 36px rgba(0,0,0,.25)}
+.glass::selection{background:rgba(var(--room-rgb),.25)}
+.glass .depth-layer{position:absolute;inset:8px;border:1px solid rgba(255,255,255,.04);pointer-events:none}
+.glass .depth-layer.l2{inset:16px;opacity:.55}
+.glass .depth-layer.l3{inset:24px;opacity:.35}
+
+#hud-extra{font-size:.42rem;letter-spacing:1.3px;color:rgba(225,240,255,.5);margin-top:4px}
+#hud-extra span{color:var(--c1)}
+
+#env-pulse{position:fixed;inset:0;z-index:520;pointer-events:none;overflow:hidden}
+.env-ripple{position:absolute;width:18px;height:18px;border-radius:50%;border:1px solid rgba(var(--room-rgb),.6);transform:translate(-50%,-50%) scale(0.2);animation:envPulse .8s ease-out forwards}
+@keyframes envPulse{to{opacity:0;transform:translate(-50%,-50%) scale(12)}}
+
+body.sig-vertical #stage{transition:filter .4s;filter:drop-shadow(0 0 20px rgba(0,229,255,.08))}
+body.sig-horizontal #stage{transform-origin:50% 50%}
+body.sig-incline #stage-clip{filter:saturate(1.08)}
+body.state-entering #stage{animation:portalPush .85s var(--ez)}
+@keyframes portalPush{0%{transform:translateZ(0)}40%{transform:translateZ(42px)}100%{transform:translateZ(0)}}
+
+@media (prefers-reduced-motion: reduce){
+  .hub-core,#travel-gate.on,#room-fx::after,.env-ripple{animation:none!important}
+  body{--snap-dur:300ms}
+}
+
 </style>
 </head>
-<body>
+<body class="state-calibrating">
+
+<div id="facility-overlay" aria-live="polite">
+  <div class="facility-shell">
+    <div class="facility-log" id="facility-log">Calibrating DRN Systems…</div>
+    <button id="facility-enter" disabled>ENTER FACILITY</button>
+  </div>
+</div>
+<div id="room-fx"></div>
+<div id="travel-gate" aria-hidden="true"></div>
+<div id="env-pulse" aria-hidden="true"></div>
 
 
 <!-- ░░ DRN PROBE ░░ -->
@@ -1078,6 +1148,7 @@ a{color:inherit;text-decoration:none}
   <div id="hud-bar"></div>
   <div id="hud-stability">STABILITY <span class="stab-val" id="stab-val">100%</span></div>
   <div id="hud-frags">◈ <span class="frag-count" id="frag-count">0</span>/14 FRAGMENTS</div>
+  <div id="hud-extra">MODE <span id="hud-mode">CALIBRATING</span> · VECTOR <span id="hud-vector">VERTICAL</span> · DEPTH <span id="hud-depth">0.0</span></div>
 </div>
 <div id="scroll-prog"></div>
 <div id="mode-pill">▼ VERTICAL</div>
@@ -1258,6 +1329,17 @@ a{color:inherit;text-decoration:none}
           <button class="hbtn" data-goto="11">Packages</button>
           <button class="hbtn" data-goto="13" style="grid-column:2/3">Contact</button>
         </nav>
+        <!-- HTML HUB -->
+        <div class="home-hub" aria-label="Home hub navigation">
+          <div class="hub-core">REACTOR</div>
+          <button class="hub-node" data-target="1" data-signature="VERTICAL" data-shape="diamond" style="left:24%;top:24%">Identity</button>
+          <button class="hub-node" data-target="3" data-signature="INCLINE" data-shape="hex" style="left:76%;top:24%">Agentic AI</button>
+          <button class="hub-node" data-target="4" data-signature="HORIZONTAL" data-shape="pill" style="left:14%;top:56%">Workflows</button>
+          <button class="hub-node" data-target="5" data-signature="INCLINE" data-shape="hex" style="left:86%;top:56%">RAG Systems</button>
+          <button class="hub-node" data-target="10" data-signature="VERTICAL" data-shape="diamond" style="left:30%;top:84%">Architecture</button>
+          <button class="hub-node" data-target="12" data-signature="HORIZONTAL" data-shape="pill" style="left:50%;top:14%">FAQ</button>
+          <button class="hub-node" data-target="13" data-signature="INCLINE" data-shape="pill" style="left:70%;top:84%">Contact</button>
+        </div>
       </div>
       <div class="scroll-hint">
         <span class="sh-text">Scroll to Enter</span>
@@ -2269,6 +2351,182 @@ a{color:inherit;text-decoration:none}
   </div><!-- /#stage -->
 </div><!-- /#stage-clip -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* JS STATE */
+(function(){
+  const states = { CALIBRATING:'CALIBRATING', READY:'READY', ENTERING:'ENTERING', LIVE:'LIVE' };
+  const roomProfiles = [
+    {tint:'#00e5ff',motif:'blueprint',motion:'scan'},
+    {tint:'#00e5ff',motif:'prism',motion:'pulse'},
+    {tint:'#b400ff',motif:'prism',motion:'assemble'},
+    {tint:'#00ff9d',motif:'orbital',motion:'orbit'},
+    {tint:'#ff7b00',motif:'scan',motion:'scan'},
+    {tint:'#ff2d9b',motif:'orbital',motion:'orbit'},
+    {tint:'#00ff9d',motif:'blueprint',motion:'assemble'},
+    {tint:'#4f46ff',motif:'prism',motion:'pulse'},
+    {tint:'#00e5ff',motif:'scan',motion:'scan'},
+    {tint:'#00ff9d',motif:'blueprint',motion:'assemble'},
+    {tint:'#ff7b00',motif:'blueprint',motion:'scan'},
+    {tint:'#ff2d9b',motif:'prism',motion:'pulse'},
+    {tint:'#00e5ff',motif:'orbital',motion:'orbit'},
+    {tint:'#00ff9d',motif:'scan',motion:'scan'}
+  ];
+  const sigMap = {1:'VERTICAL',3:'INCLINE',4:'HORIZONTAL',5:'INCLINE',10:'VERTICAL',12:'HORIZONTAL',13:'INCLINE'};
+  const log = document.getElementById('facility-log');
+  const enterBtn = document.getElementById('facility-enter');
+  const overlay = document.getElementById('facility-overlay');
+  const hudMode = document.getElementById('hud-mode');
+  const hudVector = document.getElementById('hud-vector');
+  const hudDepth = document.getElementById('hud-depth');
+  const gate = document.getElementById('travel-gate');
+  const envPulse = document.getElementById('env-pulse');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let state = states.CALIBRATING;
+  let depth = 0;
+  let moving = false;
+  let wheelLock = false;
+  let touchStart = null;
+  let perfTier = 2;
+
+  function setMode(m){ state = m; document.body.dataset.mode = m; hudMode && (hudMode.textContent = m); document.body.classList.remove('state-calibrating','state-ready','state-entering','state-live'); document.body.classList.add('state-'+m.toLowerCase()); }
+  function setRoom(idx){
+    const p = roomProfiles[idx] || roomProfiles[0];
+    const rgb = p.tint.match(/[\da-f]{2}/gi).map(h=>parseInt(h,16)).join(',');
+    document.documentElement.style.setProperty('--room-tint', p.tint);
+    document.documentElement.style.setProperty('--room-rgb', rgb);
+    document.body.classList.remove('motif-blueprint','motif-prism','motif-orbital','motif-scan');
+    document.body.classList.add('motif-'+p.motif);
+  }
+  function updateDepth(z){ depth += z; hudDepth && (hudDepth.textContent = depth.toFixed(1)); document.documentElement.style.setProperty('--depth-z', depth.toFixed(1)); }
+
+  function buildCalibration(){
+    const panels = [...document.querySelectorAll('.sec-panel')];
+    window.sectionRegistry = panels.map((p,i)=>({idx:i,name:p.dataset.sec,color:p.dataset.color,rect:p.getBoundingClientRect()}));
+    window.sectionRegistry.forEach(item=>{ item.rect = document.querySelectorAll('.sec-panel')[item.idx].getBoundingClientRect(); });
+  }
+
+  function perfDetect(){
+    const cores = navigator.hardwareConcurrency || 4;
+    if (cores <= 4 || window.innerWidth < 600) perfTier = 0;
+    else if (cores <= 8) perfTier = 1;
+    document.body.dataset.perf = String(perfTier);
+    document.documentElement.style.setProperty('--particle-density', perfTier === 0 ? '.6' : perfTier === 1 ? '.8' : '1');
+  }
+
+  function runCalibration(){
+    setMode(states.CALIBRATING);
+    perfDetect();
+    log.innerHTML = '<strong>Calibrating DRN Systems…</strong><br>Mapping room lattice and anchoring navigation nodes…';
+    buildCalibration();
+    setTimeout(()=>{ log.innerHTML = '<strong>Stabilizing Reactor…</strong><br>Converging ambient particles into facility grid…'; document.body.classList.add('lattice-on'); }, 620);
+    setTimeout(()=>{ setMode(states.READY); enterBtn.disabled = false; log.innerHTML = '<strong>Calibration complete.</strong><br>Press ENTER to cross the threshold.'; }, 1700);
+  }
+
+  /* JS TRAVEL */
+  window.travelToSection = function(targetIndex, signature='VERTICAL', force=false){
+    if((state !== states.LIVE && !force) || moving) return;
+    if(typeof targetIndex !== 'number') targetIndex = parseInt(targetIndex,10) || 0;
+    const idx = Math.max(0, Math.min(document.querySelectorAll('.sec-panel').length - 1, targetIndex));
+    const sig = (signature || sigMap[idx] || ['VERTICAL','HORIZONTAL','INCLINE'][idx%3]).toUpperCase();
+    moving = true;
+    hudVector && (hudVector.textContent = sig);
+    document.body.classList.remove('sig-vertical','sig-horizontal','sig-incline');
+    document.body.classList.add('sig-'+(sig==='INCLINE'?'incline':sig.toLowerCase()));
+    const tint = (window.sectionRegistry?.[idx]?.color) || '#00e5ff';
+    const rgb = tint.match(/[\da-f]{2}/gi).map(h=>parseInt(h,16)).join(',');
+    document.documentElement.style.setProperty('--room-rgb', rgb);
+    if(gate){ gate.classList.remove('on'); void gate.offsetWidth; gate.classList.add('on'); }
+    if(!prefersReduced) updateDepth(sig==='VERTICAL'?0.8:sig==='HORIZONTAL'?0.6:1.1);
+    if(window._navigateTo) window._navigateTo(idx);
+    setRoom(idx);
+    setTimeout(()=>moving=false, prefersReduced?320:980);
+  }
+
+  // capture original goto API used by overlay/buttons
+  function applyApiOverrides(){
+    window.gotoSection = function(n){ window.travelToSection(n, sigMap[n] || ['VERTICAL','HORIZONTAL','INCLINE'][n%3]); };
+    window.idxGoto = function(n){ if(window.closeIdx) window.closeIdx(); setTimeout(()=>window.travelToSection(n, sigMap[n] || ['VERTICAL','HORIZONTAL','INCLINE'][n%3]), 220); };
+  }
+  applyApiOverrides();
+  setTimeout(applyApiOverrides, 0);
+  window.addEventListener('load', applyApiOverrides);
+
+  function nextIdx(delta){ const cur = window.getCurrentSection ? window.getCurrentSection() : (window.curSec||0); return Math.max(0, Math.min(document.querySelectorAll('.sec-panel').length-1, cur + delta)); }
+
+  // block legacy navigation while calibrating and route to travel API when live
+  window.addEventListener('wheel', (e)=>{
+    if(state !== states.LIVE){ e.preventDefault(); e.stopImmediatePropagation(); return; }
+    e.preventDefault(); e.stopImmediatePropagation();
+    if(wheelLock) return; wheelLock = true;
+    const idx = nextIdx(e.deltaY>0?1:-1);
+    window.travelToSection(idx, ['VERTICAL','HORIZONTAL','INCLINE'][idx%3]);
+    setTimeout(()=>wheelLock=false,780);
+  }, {passive:false, capture:true});
+
+  document.addEventListener('keydown', (e)=>{
+    if(state !== states.LIVE && !['Enter','Escape'].includes(e.key)){ if(['ArrowDown','ArrowUp','PageDown','PageUp',' '].includes(e.key)){ e.preventDefault(); e.stopImmediatePropagation(); } return; }
+    if(['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); e.stopImmediatePropagation(); const idx=nextIdx(1); window.travelToSection(idx,['VERTICAL','HORIZONTAL','INCLINE'][idx%3]); }
+    if(['ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); e.stopImmediatePropagation(); const idx=nextIdx(-1); window.travelToSection(idx,['VERTICAL','HORIZONTAL','INCLINE'][idx%3]); }
+  }, true);
+
+  window.addEventListener('touchstart',e=>{touchStart=e.changedTouches[0];},{passive:true,capture:true});
+  window.addEventListener('touchend',e=>{
+    if(state !== states.LIVE){ e.stopImmediatePropagation(); return; }
+    if(!touchStart) return;
+    const t=e.changedTouches[0], dx=touchStart.clientX-t.clientX, dy=touchStart.clientY-t.clientY;
+    if(Math.max(Math.abs(dx),Math.abs(dy))<40) return;
+    e.stopImmediatePropagation();
+    const idx = nextIdx((dy>0||dx>0)?1:-1);
+    window.travelToSection(idx,['VERTICAL','HORIZONTAL','INCLINE'][idx%3]);
+  },{passive:true,capture:true});
+
+  document.querySelectorAll('.hbtn, .hub-node').forEach(el=>{
+    el.addEventListener('click',ev=>{
+      if(state !== states.LIVE){ ev.preventDefault(); ev.stopImmediatePropagation(); return; }
+      const t = parseInt(el.dataset.target || el.dataset.goto || '0',10);
+      const sig = el.dataset.signature || sigMap[t] || ['VERTICAL','HORIZONTAL','INCLINE'][t%3];
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      window.travelToSection(t,sig);
+    }, true);
+  });
+
+  const enter = ()=>{
+    if(state !== states.READY) return;
+    setMode(states.ENTERING);
+    hudVector && (hudVector.textContent = 'INBOUND');
+    if(gate){ gate.classList.add('on'); }
+    setTimeout(()=>{ setMode(states.LIVE); overlay.classList.add('hidden'); window.travelToSection(0,'VERTICAL',true); }, 820);
+  };
+  enterBtn?.addEventListener('click', enter);
+  enterBtn?.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enter(); }});
+
+  // micro feedback + probe magnetization helper
+  document.addEventListener('pointerover',e=>{ if(e.target.closest('button,a,.hub-node,.ndot,.idx-row,.drop-hd')) document.getElementById('drn-probe')?.classList.add('docking'); });
+  document.addEventListener('pointerout',e=>{ if(e.target.closest('button,a,.hub-node,.ndot,.idx-row,.drop-hd')) document.getElementById('drn-probe')?.classList.remove('docking'); });
+  document.addEventListener('pointerdown',e=>{
+    const r = document.createElement('span'); r.className='env-ripple'; r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px'; envPulse?.appendChild(r); setTimeout(()=>r.remove(),850);
+  });
+
+  // add physical layers to all glass panels
+  document.querySelectorAll('.glass').forEach(g=>{ if(g.querySelector('.depth-layer')) return; ['l1','l2','l3'].forEach(c=>{ const d=document.createElement('div'); d.className='depth-layer '+c; g.appendChild(d); }); });
+
+  /* JS HUD + room sync */
+  document.addEventListener('sectionchange',e=>{
+    const idx = e.detail || 0;
+    setRoom(idx);
+    const sv = document.getElementById('stab-val');
+    if(sv) sv.textContent = `${Math.max(84,98-Math.floor(depth*2))}%`;
+  });
+
+  /* JS PERF */
+  if(prefersReduced){ document.body.classList.add('reduced-motion'); }
+  let f=0, last=performance.now();
+  requestAnimationFrame(function fpsLoop(now){ f++; if(now-last>1000){ if(f<36) document.body.dataset.perf='0'; f=0; last=now; } requestAnimationFrame(fpsLoop); });
+
+  runCalibration();
+})();
+
+</script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    DRN.TODAY V3 — 3D ROTATING TRANSITION ENGINE
