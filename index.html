@@ -7,6 +7,7 @@
 <meta name="description" content="DRN.TODAY — Somnath Kurmi, AI Systems Architect & Full-Stack Innovator.">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
+/* === CSS COMMENT ZONE: NEON QUANTUM VAULT THEME === */
 /* ═══════════════════════════════════════════════
    BASE RESET
 ═══════════════════════════════════════════════ */
@@ -1085,6 +1086,30 @@ body.state-entering #travel-gate{opacity:1;animation:gatePass .85s var(--ez)}
 .env-ripple{position:absolute;width:18px;height:18px;border-radius:50%;border:1px solid rgba(var(--room-rgb),.6);transform:translate(-50%,-50%) scale(0.2);animation:envPulse .8s ease-out forwards}
 @keyframes envPulse{to{opacity:0;transform:translate(-50%,-50%) scale(12)}}
 
+/* === OPTION A: NEON QUANTUM VAULT (CSS ZONE) === */
+#vault-world{position:fixed;inset:0;z-index:20;pointer-events:none;perspective:1200px;overflow:hidden}
+.vault-tunnel{position:absolute;inset:-16vh -16vw;transform-style:preserve-3d;animation:tunnelDrift 18s linear infinite}
+.vault-plane{position:absolute;left:50%;top:50%;width:min(150vw,1600px);height:min(120vh,900px);transform-style:preserve-3d;border:1px solid rgba(var(--room-rgb),.2);box-shadow:0 0 24px rgba(var(--room-rgb),.16),inset 0 0 40px rgba(var(--room-rgb),.1)}
+.vault-plane::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(var(--room-rgb),.12) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--room-rgb),.12) 1px,transparent 1px);background-size:52px 52px;opacity:.6}
+.vault-plane.p1{transform:translate3d(-50%,-50%,-120px) rotateY(32deg) rotateX(12deg)}
+.vault-plane.p2{transform:translate3d(-50%,-50%,80px) rotateY(-26deg) rotateX(8deg)}
+.vault-plane.p3{transform:translate3d(-50%,-50%,260px) rotateY(16deg) rotateX(-9deg)}
+body.lattice-on .vault-plane{animation:latticeLock 1.1s var(--ez) both}
+@keyframes latticeLock{0%{opacity:.22;filter:blur(2px)}100%{opacity:.85;filter:none}}
+@keyframes tunnelDrift{0%,100%{transform:translateZ(0) translateX(0)}50%{transform:translateZ(30px) translateX(1.2vw)}}
+
+#guide-hud{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:620;width:min(94vw,900px);background:rgba(5,12,24,.74);border:1px solid rgba(var(--room-rgb),.34);border-radius:10px;backdrop-filter:blur(10px);padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+#guide-caption{font-family:var(--FM);font-size:clamp(.58rem,1.8vw,.75rem);line-height:1.45;color:rgba(214,245,255,.86);min-height:1.6em}
+#guide-controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.guide-btn{min-height:36px;padding:8px 12px;border-radius:8px;border:1px solid rgba(var(--room-rgb),.32);background:rgba(5,15,30,.72);color:#d8fbff;font-family:var(--FM);font-size:.56rem;letter-spacing:1.1px;text-transform:uppercase;cursor:pointer}
+.guide-btn[aria-pressed="true"]{background:rgba(var(--room-rgb),.16);color:var(--room-tint);box-shadow:0 0 14px rgba(var(--room-rgb),.28)}
+.guide-btn:active{transform:translateY(1px) scale(.985)}
+.guide-highlight{box-shadow:0 0 0 1px rgba(var(--room-rgb),.66),0 0 20px rgba(var(--room-rgb),.45)!important;animation:guidePulse 1.2s ease-in-out infinite}
+@keyframes guidePulse{0%,100%{transform:translateZ(0) scale(1)}50%{transform:translateZ(5px) scale(1.03)}}
+
+body[data-perf="0"] .vault-plane::before{opacity:.35;background-size:68px 68px}
+@media(max-width:860px){#guide-hud{grid-template-columns:1fr;padding:10px}#guide-controls{justify-content:flex-start}.guide-btn{min-height:40px;min-width:72px}}
+
 body.sig-vertical #stage{transition:filter .4s;filter:drop-shadow(0 0 20px rgba(0,229,255,.08))}
 body.sig-horizontal #stage{transform-origin:50% 50%}
 body.sig-incline #stage-clip{filter:saturate(1.08)}
@@ -1092,7 +1117,8 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
 @keyframes portalPush{0%{transform:translateZ(0)}40%{transform:translateZ(42px)}100%{transform:translateZ(0)}}
 
 @media (prefers-reduced-motion: reduce){
-  .hub-core,#travel-gate.on,#room-fx::after,.env-ripple{animation:none!important}
+  .hub-core,#travel-gate.on,#room-fx::after,.env-ripple,.vault-tunnel,.guide-highlight{animation:none!important}
+  .vault-plane{opacity:.45}
   body{--snap-dur:300ms}
 }
 
@@ -1107,6 +1133,13 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
   </div>
 </div>
 <div id="room-fx"></div>
+<div id="vault-world" aria-hidden="true">
+  <div class="vault-tunnel">
+    <div class="vault-plane p1"></div>
+    <div class="vault-plane p2"></div>
+    <div class="vault-plane p3"></div>
+  </div>
+</div>
 <div id="travel-gate" aria-hidden="true"></div>
 <div id="env-pulse" aria-hidden="true"></div>
 
@@ -1152,6 +1185,16 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
 </div>
 <div id="scroll-prog"></div>
 <div id="mode-pill">▼ VERTICAL</div>
+
+<div id="guide-hud" role="group" aria-label="Agentic AI guide controls">
+  <div id="guide-caption">Agentic AI Guide: Calibration in progress…</div>
+  <div id="guide-controls">
+    <button class="guide-btn" id="guide-mode" aria-pressed="true">Tour</button>
+    <button class="guide-btn" id="guide-back">Back</button>
+    <button class="guide-btn" id="guide-next">Next</button>
+    <button class="guide-btn" id="guide-skip">Skip</button>
+  </div>
+</div>
 
 <!-- ░░ NAV DOTS ░░ -->
 <div id="nav" role="navigation" aria-label="Section navigation"></div>
@@ -2352,6 +2395,7 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
 </div><!-- /#stage-clip -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+/* === JS COMMENT ZONE: ENTRY + TRAVEL + GUIDE CONTROLLER === */
 /* JS STATE */
 (function(){
   const states = { CALIBRATING:'CALIBRATING', READY:'READY', ENTERING:'ENTERING', LIVE:'LIVE' };
@@ -2380,6 +2424,11 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
   const hudDepth = document.getElementById('hud-depth');
   const gate = document.getElementById('travel-gate');
   const envPulse = document.getElementById('env-pulse');
+  const guideCaption = document.getElementById('guide-caption');
+  const guideModeBtn = document.getElementById('guide-mode');
+  const guideBackBtn = document.getElementById('guide-back');
+  const guideNextBtn = document.getElementById('guide-next');
+  const guideSkipBtn = document.getElementById('guide-skip');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let state = states.CALIBRATING;
   let depth = 0;
@@ -2387,6 +2436,24 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
   let wheelLock = false;
   let touchStart = null;
   let perfTier = 2;
+  let guideMode = 'TOUR';
+  let autoTourTimer = null;
+  const guideLines = [
+    'Welcome to the Quantum Vault. I will guide you chamber by chamber.',
+    'Identity chamber loaded. Review profile metrics and timeline uplinks.',
+    'DRN System chamber online. Delivery lanes are now visible.',
+    'Agentic AI chamber active. Multi-agent orchestration pathways highlighted.',
+    'Workflow chamber active. Automation routes are now synchronized.',
+    'RAG Systems chamber active. Retrieval vectors are calibrated.',
+    'AI Automation chamber active. Model switching buses are stable.',
+    'Full-Stack chamber active. Frontend and backend surfaces are coupled.',
+    'Mobile Apps chamber active. Device deployment gates are open.',
+    'Backend chamber active. API flow and service mesh stabilised.',
+    'Architecture chamber active. Blueprint lattice is in focus.',
+    'Packages chamber active. Delivery plans are now illuminated.',
+    'FAQ chamber active. Diagnostic answers are indexed.',
+    'Contact chamber active. Communication uplink ready.'
+  ];
 
   function setMode(m){ state = m; document.body.dataset.mode = m; hudMode && (hudMode.textContent = m); document.body.classList.remove('state-calibrating','state-ready','state-entering','state-live'); document.body.classList.add('state-'+m.toLowerCase()); }
   function setRoom(idx){
@@ -2416,10 +2483,30 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
   function runCalibration(){
     setMode(states.CALIBRATING);
     perfDetect();
-    log.innerHTML = '<strong>Calibrating DRN Systems…</strong><br>Mapping room lattice and anchoring navigation nodes…';
+    log.innerHTML = '<strong>Calibrating DRN Systems…</strong><br>Validating vault power rails and nav matrix…';
+    if(guideCaption) guideCaption.textContent = 'Agentic AI Guide: Calibrating DRN Systems…';
     buildCalibration();
-    setTimeout(()=>{ log.innerHTML = '<strong>Stabilizing Reactor…</strong><br>Converging ambient particles into facility grid…'; document.body.classList.add('lattice-on'); }, 620);
-    setTimeout(()=>{ setMode(states.READY); enterBtn.disabled = false; log.innerHTML = '<strong>Calibration complete.</strong><br>Press ENTER to cross the threshold.'; }, 1700);
+    setTimeout(()=>{ log.innerHTML = '<strong>Aligning Quantum Lattice…</strong><br>Converging ambient sparks into structured neon rails…'; document.body.classList.add('lattice-on'); if(guideCaption) guideCaption.textContent='Agentic AI Guide: Aligning Quantum Lattice…'; }, 620);
+    setTimeout(()=>{ log.innerHTML = '<strong>Verifying Chamber Coordinates…</strong><br>Binding gateway signatures to all sections…'; }, 1280);
+    setTimeout(()=>{ setMode(states.READY); enterBtn.disabled = false; log.innerHTML = '<strong>Calibration complete.</strong><br>Press ENTER to cross the threshold.'; if(guideCaption) guideCaption.textContent='Agentic AI Guide: Systems calibrated. Press ENTER to begin tour.'; }, 1960);
+  }
+
+  function clearGuideHighlights(){ document.querySelectorAll('.guide-highlight').forEach(el=>el.classList.remove('guide-highlight')); }
+  function highlightCurrentChamber(index){
+    clearGuideHighlights();
+    const panel = document.querySelectorAll('.sec-panel')[index];
+    if(!panel) return;
+    const targets = panel.querySelectorAll('.drop-hd,.hbtn,.hub-node,.idx-row,.faq-q,.li-btn,.ccard a,.pkg,.cube-card');
+    [...targets].slice(0,2).forEach(t=>t.classList.add('guide-highlight'));
+  }
+  function queueTourAdvance(index){
+    if(guideMode!=='TOUR' || state!==states.LIVE) return;
+    clearTimeout(autoTourTimer);
+    autoTourTimer = setTimeout(()=>{ const n=(index+1)%document.querySelectorAll('.sec-panel').length; window.travelToSection(n,['VERTICAL','HORIZONTAL','INCLINE'][n%3]); }, prefersReduced?5200:3600);
+  }
+  function setGuideCaption(index){
+    if(!guideCaption) return;
+    guideCaption.textContent = `Agentic AI Guide: ${guideLines[index] || guideLines[0]}`;
   }
 
   /* JS TRAVEL */
@@ -2439,6 +2526,9 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
     if(!prefersReduced) updateDepth(sig==='VERTICAL'?0.8:sig==='HORIZONTAL'?0.6:1.1);
     if(window._navigateTo) window._navigateTo(idx);
     setRoom(idx);
+    setGuideCaption(idx);
+    highlightCurrentChamber(idx);
+    queueTourAdvance(idx);
     setTimeout(()=>moving=false, prefersReduced?320:980);
   }
 
@@ -2495,10 +2585,22 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
     setMode(states.ENTERING);
     hudVector && (hudVector.textContent = 'INBOUND');
     if(gate){ gate.classList.add('on'); }
-    setTimeout(()=>{ setMode(states.LIVE); overlay.classList.add('hidden'); window.travelToSection(0,'VERTICAL',true); }, 820);
+    setTimeout(()=>{ setMode(states.LIVE); overlay.classList.add('hidden'); if(guideCaption) guideCaption.textContent='Agentic AI Guide: Threshold crossed. Welcome to the HOME hub.'; window.travelToSection(0,'VERTICAL',true); }, 820);
   };
   enterBtn?.addEventListener('click', enter);
   enterBtn?.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enter(); }});
+
+  guideModeBtn?.addEventListener('click',()=>{
+    guideMode = guideMode === 'TOUR' ? 'EXPLORE' : 'TOUR';
+    guideModeBtn.setAttribute('aria-pressed', String(guideMode==='TOUR'));
+    guideModeBtn.textContent = guideMode === 'TOUR' ? 'Tour' : 'Explore';
+    if(guideCaption) guideCaption.textContent = guideMode === 'TOUR' ? 'Agentic AI Guide: TOUR mode engaged. Auto-routing enabled.' : 'Agentic AI Guide: EXPLORE mode engaged. Manual chamber control active.';
+    if(guideMode !== 'TOUR') clearTimeout(autoTourTimer);
+    else queueTourAdvance(window.getCurrentSection ? window.getCurrentSection() : 0);
+  });
+  guideNextBtn?.addEventListener('click',()=>{ const idx=nextIdx(1); window.travelToSection(idx,['VERTICAL','HORIZONTAL','INCLINE'][idx%3]); });
+  guideBackBtn?.addEventListener('click',()=>{ const idx=nextIdx(-1); window.travelToSection(idx,['VERTICAL','HORIZONTAL','INCLINE'][idx%3]); });
+  guideSkipBtn?.addEventListener('click',()=>{ clearTimeout(autoTourTimer); guideMode='EXPLORE'; guideModeBtn && guideModeBtn.setAttribute('aria-pressed','false'); if(guideModeBtn) guideModeBtn.textContent='Explore'; if(guideCaption) guideCaption.textContent='Agentic AI Guide: Tour skipped. Explore freely using hub nodes, index, or nav.'; });
 
   // micro feedback + probe magnetization helper
   document.addEventListener('pointerover',e=>{ if(e.target.closest('button,a,.hub-node,.ndot,.idx-row,.drop-hd')) document.getElementById('drn-probe')?.classList.add('docking'); });
@@ -2524,6 +2626,16 @@ body.state-entering #stage{animation:portalPush .85s var(--ez)}
   requestAnimationFrame(function fpsLoop(now){ f++; if(now-last>1000){ if(f<36) document.body.dataset.perf='0'; f=0; last=now; } requestAnimationFrame(fpsLoop); });
 
   runCalibration();
+
+  /* PR CHECKLIST:
+   - [ ] calibration → enter → hub nodes
+   - [ ] travel signatures (VERTICAL/HORIZONTAL/INCLINE)
+   - [ ] gateway flash appears per destination tint
+   - [ ] section motifs + motion update per chamber
+   - [ ] dropdowns/index navigation remain functional
+   - [ ] mobile interaction and thumb targets
+   - [ ] prefers-reduced-motion behavior
+  */
 })();
 
 </script>
