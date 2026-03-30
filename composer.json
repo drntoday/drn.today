@@ -1,0 +1,26 @@
+{
+    "name": "drntoday/website",
+    "description": "DRN.today — Agentic AI & Automation Systems Website",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    },
+    "authors": [
+        {
+            "name": "Somnath Kurmi",
+            "email": "contact@drn.today",
+            "homepage": "https://www.linkedin.com/in/somnath-kurmi-027128385",
+            "role": "Founder & Lead Architect"
+        }
+    ],
+    "support": {
+        "email": "contact@drn.today",
+        "issues": "https://github.com/drntoday/website/issues",
+        "source": "https://github.com/drntoday/website"
+    },
+    "license": "proprietary"
+}
